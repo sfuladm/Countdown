@@ -1,0 +1,236 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Happy Birthday Amylia❤️</title>
+  <link href="https://fonts.googleapis.com/css2?family=Pacifico&family=Dancing+Script:wght@700&display=swap" rel="stylesheet"/>
+  <style>
+    /* Your CSS remains the same (unchanged) */
+    body {
+      margin: 0;
+      padding: 0;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      min-height: 100vh;
+      background: #ffeff7;
+      font-family: 'Pacifico', cursive;
+      touch-action: manipulation;
+      overflow: hidden;
+    }
+
+    .countdown-container {
+      text-align: center;
+      background: rgba(255, 255, 255, 0.95);
+      padding: 2rem 3rem;
+      border-radius: 20px;
+      box-shadow: 0 0 30px rgba(255, 51, 102, 0.2);
+      border: 3px solid #ff69b4;
+    }
+
+    #countdown {
+      font-size: 3rem;
+      color: #ff3366;
+      text-shadow: 2px 2px 4px rgba(255, 105, 180, 0.3);
+      letter-spacing: 2px;
+    }
+
+    .birthday-popup {
+      display: none;
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(255, 223, 223, 0.98);
+      justify-content: center;
+      align-items: center;
+      z-index: 1000;
+      animation: fadeIn 0.5s ease;
+    }
+
+    .birthday-message {
+      text-align: center;
+      color: #ff3366;
+      font-size: 4rem;
+      font-family: 'Dancing Script', cursive;
+      text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.1);
+      position: relative;
+      padding: 2rem;
+      background: white;
+      border-radius: 15px;
+      box-shadow: 0 0 30px rgba(255, 51, 102, 0.3);
+      animation: float 3s ease-in-out infinite;
+    }
+
+    .birthday-message::before {
+      content: '🎉';
+      position: absolute;
+      font-size: 3rem;
+      top: -30px;
+      left: -30px;
+      animation: spin 4s linear infinite;
+    }
+
+    .birthday-message::after {
+      content: '🎂';
+      position: absolute;
+      font-size: 3rem;
+      bottom: -40px;
+      right: -30px;
+      animation: bounce 2s ease infinite;
+    }
+
+    .confetti {
+      position: absolute;
+      width: 12px;
+      height: 12px;
+      background: #ff0;
+      animation: fall linear forwards;
+      border-radius: 50%;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; }
+      to { opacity: 1; }
+    }
+
+    @keyframes fall {
+      0% { transform: translateY(-100vh) rotate(0deg); }
+      100% { transform: translateY(100vh) rotate(360deg); }
+    }
+
+    @keyframes float {
+      0%, 100% { transform: translateY(0); }
+      50% { transform: translateY(-20px); }
+    }
+
+    @keyframes spin {
+      from { transform: rotate(0deg); }
+      to { transform: rotate(360deg); }
+    }
+
+    @keyframes bounce {
+      0%, 100% { transform: translateY(0); }
+      50% { transform: translateY(-20px); }
+    }
+
+    .instructions {
+      margin-top: 20px;
+      color: #ff69b4;
+      font-size: 1rem;
+      line-height: 1.4;
+    }
+
+    .hearts span {
+      position: absolute;
+      animation: hearts 3s ease-in infinite;
+      font-size: 1.5rem;
+    }
+
+    @keyframes hearts {
+      0% { opacity: 0; transform: translateY(0); }
+      20% { opacity: 1; }
+      100% { opacity: 0; transform: translateY(-100vh); }
+    }
+  </style>
+</head>
+<body>
+  <div class="countdown-container">
+    <div id="countdown">00:00:00:00</div>
+    <div class="instructions">
+      (Press SPACE or double-tap<br>to start celebration!)
+    </div>
+  </div>
+
+  <div class="birthday-popup">
+    <div class="birthday-message">
+      HAPPY BIRTHDAY<br>MY LOVE AMYLIA ❤️
+    </div>
+    <div class="hearts"></div>
+  </div>
+
+  <script>
+    let isCelebrationActive = false;
+    let lastTap = 0;
+
+	// 🎯 Set countdown to midnight today
+	const targetDate = new Date();
+	targetDate.setHours(24, 0, 0, 0);
+
+
+    // Event listeners
+    document.addEventListener('keydown', (event) => {
+      if (event.code === 'Space' && !isCelebrationActive) triggerCelebration();
+    });
+
+    document.addEventListener('touchstart', handleTouch);
+
+    function handleTouch(e) {
+      const currentTime = new Date().getTime();
+      if (currentTime - lastTap < 300 && !isCelebrationActive) triggerCelebration();
+      lastTap = currentTime;
+    }
+
+    function triggerCelebration() {
+      showBirthday();
+      clearInterval(countdownInterval);
+      startHearts();
+    }
+
+    function updateCountdown() {
+      const now = new Date();
+      const difference = targetDate - now;
+
+      if (difference <= 0) {
+        triggerCelebration();
+        return;
+      }
+
+      const days = Math.floor(difference / (1000 * 60 * 60 * 24));
+      const hours = Math.floor((difference % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+      const minutes = Math.floor((difference % (1000 * 60 * 60)) / (1000 * 60));
+      const seconds = Math.floor((difference % (1000 * 60)) / 1000); // ✅ Fixed here!
+
+      document.getElementById('countdown').textContent =
+        `${String(days).padStart(2, '0')}:${String(hours).padStart(2, '0')}:${String(minutes).padStart(2, '0')}:${String(seconds).padStart(2, '0')}`;
+    }
+
+    function createConfetti() {
+      for (let i = 0; i < 50; i++) {
+        const confetti = document.createElement('div');
+        confetti.className = 'confetti';
+        confetti.style.left = Math.random() * 100 + 'vw';
+        confetti.style.animationDuration = Math.random() * 3 + 2 + 's';
+        confetti.style.backgroundColor = `hsl(${Math.random() * 360}, 100%, 50%)`;
+        document.body.appendChild(confetti);
+
+        confetti.addEventListener('animationend', () => confetti.remove());
+      }
+    }
+
+    function startHearts() {
+      setInterval(() => {
+        const heart = document.createElement('span');
+        heart.innerHTML = '❤️';
+        heart.style.left = Math.random() * 95 + 'vw';
+        heart.style.animationDuration = Math.random() * 2 + 3 + 's';
+        document.querySelector('.hearts').appendChild(heart);
+        
+        setTimeout(() => heart.remove(), 3000);
+      }, 300);
+    }
+
+    function showBirthday() {
+      isCelebrationActive = true;
+      document.querySelector('.birthday-popup').style.display = 'flex';
+      setInterval(createConfetti, 500);
+      createConfetti();
+    }
+
+    const countdownInterval = setInterval(updateCountdown, 1000);
+    updateCountdown();
+  </script>
+</body>
+</html>
